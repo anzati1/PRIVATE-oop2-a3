@@ -31,6 +31,21 @@ public class Deck extends CardCollection implements CardSource {
     }
 
     /**
+     * Static inner class - inner classes are not loaded until they are referenced.
+     */
+    private static class Holder {
+        private static final Deck INSTANCE = new Deck();
+    }
+    /**
+     * Provides global access to the singleton instance.
+     *
+     * @return the single instance of Deck
+     */
+    public static Deck getInstance() {
+        return Holder.INSTANCE;
+    }
+
+    /**
      * Shuffles the cards in this deck randomly.
      */
     public void shuffle() {
