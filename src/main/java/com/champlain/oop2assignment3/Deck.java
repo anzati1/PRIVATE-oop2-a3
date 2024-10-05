@@ -56,4 +56,8 @@ public class Deck extends CardCollection implements CardSource {
     public Iterator<Card> iterator() {
         return this.aCards.iterator();
     }
+
+    public int size() {
+        return this.aCards.size();
+    }
 }
