@@ -1,5 +1,7 @@
 package com.champlain.oop2assignment3;
 
+import javafx.scene.control.Alert;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +25,24 @@ public class Hand extends CardCollection {
      * @param pCard the card to be added
      */
     public void addCard(Card pCard) {
-        this.aCards.add(pCard);
+
+        boolean cardCheck = false;
+
+        if(this.aCards.isEmpty()) {
+            this.aCards.add(pCard);
+            cardCheck = true;
+        } else {
+            for(int i = 0; i < aCards.size(); i++) {
+                if(this.aCards.get(i).equals(pCard)) {
+                    Alert selectionErrorAlert = new Alert(Alert.AlertType.INFORMATION, "The card you are trying to add is already in your hand, seems fishy...");
+                    selectionErrorAlert.showAndWait();
+                    cardCheck = true;
+                }
+            }
+        }
+        if(!cardCheck) {
+            this.aCards.add(pCard);
+        }
     }
 
     /**

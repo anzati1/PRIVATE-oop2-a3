@@ -1,5 +1,7 @@
 package com.champlain.oop2assignment3;
 
+import javafx.scene.control.Alert;
+
 /**
  * Represents a playing card with a specific suit and rank.
  * @implNote This class is immutable, meaning that once a card is created, its suit and rank cannot be changed.
@@ -52,5 +54,26 @@ public class Card {
     @Override
     public String toString() {
         return this.getRank() + " of " + this.getSuit();
+    }
+
+    /**
+     * Checks if the current card is equal to another card
+     *
+     * @param pObject the card that is being checked
+     * @return true if the card is the same, false if the current card and given card are different
+     */
+    @Override
+    public boolean equals(Object pObject) {
+
+        if(this == pObject) {
+            return true;
+        }
+        if(!(pObject instanceof Card)) {
+            return false;
+        }
+
+        Card pObjectCard = (Card)pObject;
+
+        return this.aRank.equals(pObjectCard.aRank) && this.aSuit.equals(pObjectCard.aSuit);
     }
 }
