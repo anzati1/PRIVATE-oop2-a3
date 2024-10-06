@@ -1,6 +1,7 @@
 package com.champlain.oop2assignment3;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class Hand extends CardCollection {
     /**
      * Checks if this hand is empty.
      *
-     * @return true if the hand has no cards, false otherwise
+     * @return {@code true} if the hand has no cards; {@code false} otherwise
      */
     public boolean isEmpty() {
         return this.aCards.isEmpty();
@@ -40,7 +41,37 @@ public class Hand extends CardCollection {
      *
      * @return an iterator for the cards
      */
+    @Override
     public Iterator<Card> iterator() {
         return this.aCards.iterator();
+    }
+
+    /**
+     * Sorts the cards in this hand by rank first.
+     */
+    public void sortRankFirst() {
+        this.aCards.sort(new RankFirstComparator());
+    }
+
+    /**
+     * Sorts the cards in this hand by suit first.
+     */
+    public void sortSuitFirst() {
+        this.aCards.sort(new SuitFirstComparator());
+    }
+
+    /**
+     * Returns a string representation of the cards in this hand.
+     * Each card is separated by a newline character.
+     *
+     * @return a string depicting all cards in the hand
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (Card card : aCards) {
+            builder.append(card.toString()).append("\n");
+        }
+        return builder.toString();
     }
 }
