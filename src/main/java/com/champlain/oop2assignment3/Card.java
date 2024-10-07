@@ -6,7 +6,7 @@ import javafx.scene.control.Alert;
  * Represents a playing card with a specific suit and rank.
  * @implNote This class is immutable, meaning that once a card is created, its suit and rank cannot be changed.
  */
-public class Card {
+public class Card implements Comparable<Card> {
     /**
      * The suit of this card (e.g., Hearts, Diamonds, Clubs, Spades).
      */
@@ -54,8 +54,17 @@ public class Card {
     @Override
     public String toString() {
         return this.getRank() + " of " + this.getSuit();
-    }
+	 }
 
+    @Override
+    public int compareTo(Card o) {
+        int suitComparison = this.aSuit.ordinal() - o.aSuit.ordinal();
+        if (suitComparison != 0) {
+            return suitComparison;
+        }
+        return aRank.ordinal() - o.aRank.ordinal();
+    }
+    
     /**
      * Checks if the current card is equal to another card
      *

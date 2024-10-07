@@ -10,6 +10,7 @@ import java.util.List;
  * <p>
  * This class allows for creating a standard deck, shuffling it, drawing cards,
  * and checking if the deck is empty.
+ * It implements the {@link CardSource} interface and extends {@link CardCollection}.
  * </p>
  */
 public class Deck extends CardCollection implements CardSource {
@@ -31,19 +32,46 @@ public class Deck extends CardCollection implements CardSource {
     }
 
     /**
+     * Static inner class that holds the singleton instance of the deck.
+     * The inner class is not loaded until it is referenced to ensure lazy initialization.
+     */
+    private static class Holder {
+        private static final Deck INSTANCE = new Deck();
+    }
+
+    /**
+     * Provides global access to the singleton instance of the deck.
+     *
+     * @return the single instance of Deck
+     */
+    public static Deck getInstance() {
+        return Holder.INSTANCE;
+    }
+
+    /**
      * Shuffles the cards in this deck randomly.
      */
     public void shuffle() {
         Collections.shuffle(this.aCards);
     }
 
+    /**
+     * Draws a card from the deck, removing it from the deck.
+     *
+     * @return the drawn card from the deck
+     */
     public Card draw() {
-        int last = this.aCards.size()-1;
+        int last = this.aCards.size() - 1;
         Card myCard = this.aCards.get(last);
         this.aCards.remove(last);
         return myCard;
     }
 
+    /**
+     * Checks if the deck is empty.
+     *
+     * @return {@code true} if the deck contains no cards; {@code false} otherwise
+     */
     public boolean isEmpty() {
         return this.aCards.isEmpty();
     }
@@ -53,7 +81,31 @@ public class Deck extends CardCollection implements CardSource {
      *
      * @return an iterator for the cards
      */
+    @Override
     public Iterator<Card> iterator() {
         return this.aCards.iterator();
+    }
+
+    /**
+     * Returns the number of cards currently in the deck.
+     *
+     * @return the count of cards in the deck
+     */
+    public int size() {
+        return this.aCards.size();
+    }
+
+    /**
+     * Sorts the deck with cards sorted by rank first.
+     */
+    public void sortRankFirst() {
+        this.aCards.sort(new RankFirstComparator());
+    }
+
+    /**
+     * Sorts the deck with cards sorted by suit first.
+     */
+    public void sortSuitFirst() {
+        this.aCards.sort(new SuitFirstComparator());
     }
 }

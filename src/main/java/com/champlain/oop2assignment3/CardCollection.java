@@ -13,4 +13,17 @@ public abstract class CardCollection implements Iterable<Card>{
         }
         return result.toString();
     }
+
+    /**
+     * Returns the number of cards in the collection.
+     *
+     * @return the count of cards
+     */
+    public int size() {
+        int count = 0;
+        for (Card ignored : this) {
+            count++;
+        }
+        return count;
+    }
 }

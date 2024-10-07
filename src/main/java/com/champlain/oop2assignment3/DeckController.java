@@ -6,6 +6,9 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Controller class for managing the deck and hand of cards in the user interface.
  * <p>
@@ -48,7 +51,8 @@ public class DeckController {
     /**
      * The deck of cards being managed by this controller.
      */
-    private final Deck aDeck = new Deck();
+    //private final Deck aDeck = new Deck();
+    private final Deck aDeck = Deck.getInstance();
 
     /**
      * The hand of cards being managed by this controller.
@@ -74,35 +78,6 @@ public class DeckController {
         this.aDeck.shuffle();
         this.displayCardCollections();
     }
-
-    /**
-     * Handles the event when the sort button is clicked.
-     * Sorts the deck based on the selected sorting strategy.
-     * Displays an error alert if no strategy is selected.
-     */
-    @FXML
-    protected void onSortButtonClick() {
-        String choice = this.aSortStrategyChoiceBox.getValue();
-        if (choice == null) {
-            Alert selectionErrorAlert = new Alert(Alert.AlertType.ERROR, "Please choose a sorting strategy first.");
-            selectionErrorAlert.showAndWait();
-        } else {
-            switch (choice) {
-                case "Rank First":
-                    // TODO: Replace the following line of code.
-                    this.aDeckTextArea.setText("This does not sort by rank first yet.");
-                    break;
-                case "Suit First":
-                    // TODO: Replace the following line of code.
-                    this.aDeckTextArea.setText("This does not sort by suit first yet.");
-                    break;
-                default:
-                    this.aDeckTextArea.setText("This should not happen! You messed up.");
-                    break;
-            }
-        }
-    }
-
     /**
      * Handles the event when the score button is clicked.
      * Calculates the score based on the selected scoring strategy.
@@ -115,19 +90,52 @@ public class DeckController {
             Alert selectionErrorAlert = new Alert(Alert.AlertType.ERROR, "Please choose a scoring strategy first.");
             selectionErrorAlert.showAndWait();
         } else {
+            ScoringStrategy strategy;
             switch (choice) {
                 case "Simple Count":
-                    // TODO: Replace the following line of code.
-                    this.aScoreLabel.setText("Simple count...");
+                    strategy = new SimpleCountStrategy();
+                    int simpleCountScore = strategy.calculateScore(this.aHand);
+                    this.aScoreLabel.setText("Simple count: " + simpleCountScore);
                     break;
                 case "Number Of Aces":
-                    // TODO: Replace the following line of code.
-                    this.aScoreLabel.setText("Number of aces...");
+                    strategy = new NumberOfAcesStrategy();
+                    int numberOfAcesScore = strategy.calculateScore(this.aHand);
+                    this.aScoreLabel.setText("Number of aces: " + numberOfAcesScore);
                     break;
                 default:
                     this.aScoreLabel.setText("This should not happen! You messed up.");
                     break;
             }
+        }
+    }
+    /**
+     * Handles the event when the score button is clicked.
+     * Calculates the score based on the selected scoring strategy.
+     * Displays an error alert if no strategy is selected.
+     */
+    @FXML
+    protected void onSortButtonClick() {
+        String choice = this.aSortStrategyChoiceBox.getValue();
+        if (choice == null) {
+            Alert selectionErrorAlert = new Alert(Alert.AlertType.ERROR, "Please choose a sorting strategy first.");
+            selectionErrorAlert.showAndWait();
+        } else {
+            // Sort and update both deck and hand based on the choice
+            switch (choice) {
+                case "Rank First":
+                    aDeck.sortRankFirst();
+                    aHand.sortRankFirst();
+                    break;
+                case "Suit First":
+                    aDeck.sortSuitFirst();
+                    aHand.sortSuitFirst();
+                    break;
+                default:
+                    // Logically should not happen, but the user needs notice
+                    aDeckTextArea.setText("This should not happen! You messed up.");
+                    return;
+            }
+            displayCardCollections(); // Refresh display after sorting
         }
     }
 
@@ -151,7 +159,7 @@ public class DeckController {
      * Updates the text areas to display the current state of the deck and hand.
      */
     private void displayCardCollections() {
-        this.aDeckTextArea.setText(this.aDeck.toString());
-        this.aHandTextArea.setText(this.aHand.toString());
+        aDeckTextArea.setText(aDeck.toString());
+        aHandTextArea.setText(aHand.toString());
     }
 }
